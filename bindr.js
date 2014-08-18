@@ -1,17 +1,28 @@
 
 // A wrapper function for accessing form elements using objects
 
-function Bindr(elemID){
+var Bindr = Bindr || {};
+
+Bindr.Bindr =  function (elemID){
 	this.elem = document.getElementById(elemID);
 	this.val = function(){
-		return this.elem.innerHTML;
+		var handlr = Bindr.BindrHandlr(this.elem.type);
+		return handlr(this.elem);
 	}
 };
 
-function BindrHandlr(){
+Bindr.BindrHandlr = function(elemName){
 	this.handles = {
-		'span': function(){
-			
+		'text': function(elem){
+			return elem.value;
+		},
+		'checkbox': function(elem){
+			return elem.checked;
+		},
+		'radio': function(elem){
+			return document.querySelector('input[name = "' + elem.name + '"]:checked').value;
 		}
-	}
+	};
+
+	return this.handles[elemName];
 }
