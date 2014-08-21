@@ -63,16 +63,18 @@ Bindr.Set = function(elemName){
 }
 
 Bindr.FormBndr = function(formID){
+	this.form;
 	this.elements = {};
 	this.initialize = function(){
-		var formElements = Array.prototype.slice.call(document.getElementById(formID).elements);
+		this.form = document.getElementById(formID);
+		var formElements = Array.prototype.slice.call(this.form.elements);
 		var that = this;
 		formElements.forEach(function(x){
 			var propkey = (x.type == 'radio' && x.name) || x.id;
-			that.formElements[propkey] = new Bindr.Bindr((x.type == 'radio' && x.id) || propkey);
+			that.elements[propkey] = new Bindr.Bindr((x.type == 'radio' && x.id) || propkey);
 		});
-		console.log(that.elements);
 	};
 
 	this.initialize();
+	return this.form;
 }
